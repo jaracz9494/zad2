@@ -7,6 +7,7 @@ package dekorator3;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -19,9 +20,17 @@ public class Dekorator3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        UzytkownikDrogi s1 = new Pieszy();
-        UzytkownikDrogi s2 = new Rower();
-        UzytkownikDrogi s3 = new Samochod();
+        
+        UzytkownikDrogi[] uzytkownik = new UzytkownikDrogi[9];
+        uzytkownik[0] = new Pieszy();;
+        uzytkownik[1] = new Rower();
+        uzytkownik[2] = new Rower();
+        uzytkownik[3] = new Samochod();
+        uzytkownik[4] = new Samochod();
+        uzytkownik[5] = new Samochod();
+        uzytkownik[6] = new Samochod();
+        uzytkownik[7] = new Samochod();
+        uzytkownik[8] = new Samochod();
         
         /*
         System.out.println("predkosc");
@@ -54,38 +63,68 @@ public class Dekorator3 {
         System.out.println(s4.about() + " " + s4.predkosc());
         
         */
-        int x, y;
         Random rand = new Random();
         
-        x=rand.nextInt(27)+1; 
-        y=rand.nextInt(7)+1;
-        s1.pozycja(x, y);
-        s1.wyswietl_pozycje();
-        
-        x=rand.nextInt(27)+1; 
-        y=rand.nextInt(7)+1;
-        s2.pozycja(x, y);
-        s2.wyswietl_pozycje();
-        
-        x=rand.nextInt(27)+1; 
-        y=rand.nextInt(7)+1;
-        s3.pozycja(x, y);
-        s3.wyswietl_pozycje();
-        
-        //int tabelaX[] = new int[5];
-        //tabelaX[0]=s1.pozycjaX;
-        
-        
-        //s1.ruch();      
-        //s1.wyswietl_pozycje();
- 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 30; j++) {
-                if (i == 0 || i == 9 || j == 0 || j == 29) System.out.print("X");
-                else System.out.print("c");
-            }
-            System.out.println();
+        for (int i=0; i<uzytkownik.length; i++) {
+            uzytkownik[i].pozycjaX=rand.nextInt(27)+1;
+            uzytkownik[i].pozycjaY=rand.nextInt(7)+1;
         }
+        
+        uzytkownik[4].wyswietl_pozycje();
+        System.out.println(uzytkownik.length);
+        System.out.println("P - pieszy");
+        System.out.println("R - rower");
+        System.out.println("S - Samochod");
+        
+        System.out.println("Wciśnij Enter aby kontynuowac");
+        try {
+            System.in.read();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }     
+        
+
+        boolean warunek=false, kraksa=false;
+        
+        while (!kraksa) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 30; j++) {
+                    if (i == 0 || i == 9 || j == 0 || j == 29) {
+                        System.out.print("O");
+                    } else {
+                        for (int z=0; z<uzytkownik.length; z++) {
+                            if (uzytkownik[z].pozycjaX==j && uzytkownik[z].pozycjaY==i) {
+                                System.out.print(uzytkownik[z].znak());
+                                warunek=true;
+                            }
+                        }
+                        if (warunek==false) System.out.print("-");
+                        warunek=false;
+
+                    }
+                }
+                System.out.println();
+            }
+            
+            
+            System.out.println("Wciśnij Enter aby kontynuowac");
+            try {
+                System.in.read();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            for (int i=0; i<uzytkownik.length; i++) {
+                uzytkownik[i].ruch();
+            }
+            for (int i=0; i<uzytkownik.length; i++) {
+                for (int j=i; j<uzytkownik.length; j++) {
+                    if (uzytkownik[i].pozycjaX==uzytkownik[j].pozycjaX || uzytkownik[i].pozycjaY==uzytkownik[j].pozycjaY) {
+                        kraksa=true;
+                    }
+                }
+            }
+        }      
+        System.out.println("DOSZLO DO ZDERZENIA!");
                 
     }
 }
@@ -94,6 +133,7 @@ public class Dekorator3 {
 abstract class UzytkownikDrogi {
     protected String uzytkownik = "Uzytkownik Drogi";
     public abstract int predkosc();
+    public abstract char znak();
     public int pozycjaX=0, pozycjaY=0;
     
     public String about(){
@@ -118,13 +158,29 @@ abstract class UzytkownikDrogi {
         
         switch (x) {
             case 0: pozycjaX+=1;
-                break;
+                    if (pozycjaX==29) {
+                        pozycjaX-=2;
+                    }
+                    break;
+                
             case 1: pozycjaX-=1;
-                break;
+                    if (pozycjaX==0) {
+                        pozycjaX+=2;
+                    }
+                    break;
+                
             case 2: pozycjaY+=1;
-                break;
+                    if (pozycjaY==9) {
+                        pozycjaY-=2;
+                    }
+                    break;
+                
             case 3: pozycjaY-=1;
-                break;
+                    if (pozycjaY==0) {
+                        pozycjaY+=2;
+                    }
+                    break;
+                
             default: System.out.println("Wystąpił problem przy losowaniu");
                 break;
         }
@@ -152,6 +208,10 @@ class Pieszy extends UzytkownikDrogi {
         return 1;
     }
     
+    public char znak(){
+        return 'P';
+    }
+    
 }
     
    
@@ -164,6 +224,10 @@ class Rower extends UzytkownikDrogi {
 
     public int predkosc(){
         return 2;
+    }
+    
+    public char znak(){
+        return 'R';
     }
     
     
@@ -179,6 +243,9 @@ class Samochod extends UzytkownikDrogi {
         return 3;
     }
     
+    public char znak(){
+        return 'S';
+    }
     
 }
  
@@ -200,9 +267,13 @@ class Opony extends Dekorator {
     }
     if(uzytkownik instanceof Rower){
         return uzytkownik.predkosc()+1;
-    }
+    } 
     
     return 1;
+    }
+    
+    public char znak(){
+        return uzytkownik.znak();
     }
 }
  
@@ -220,5 +291,9 @@ class Masa extends Dekorator {
     
     public int predkosc(){
         return uzytkownik.predkosc()+1;
+    }
+    
+    public char znak(){
+        return uzytkownik.znak();
     }
 }
