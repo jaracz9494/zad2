@@ -5,6 +5,10 @@
  */
 package dekorator3;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.util.Random;
+
 /**
  *
  * @author Dominik
@@ -15,10 +19,11 @@ public class Dekorator3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        UzytkownikDrogi s1 = new Samochod();
-        UzytkownikDrogi s2 = new Pieszy();
-        UzytkownikDrogi s3 = new Rower();
-
+        UzytkownikDrogi s1 = new Pieszy();
+        UzytkownikDrogi s2 = new Rower();
+        UzytkownikDrogi s3 = new Samochod();
+        
+        /*
         System.out.println("predkosc");
         System.out.println(s1.about() + " " + s1.predkosc());
         System.out.println(s2.about() + " " + s2.predkosc());
@@ -47,16 +52,83 @@ public class Dekorator3 {
         System.out.println("Opony i masa");
         UzytkownikDrogi s4 = new Masa(new Opony(new Samochod()));
         System.out.println(s4.about() + " " + s4.predkosc());
-
+        
+        */
+        int x, y;
+        Random rand = new Random();
+        
+        x=rand.nextInt(27)+1; 
+        y=rand.nextInt(7)+1;
+        s1.pozycja(x, y);
+        s1.wyswietl_pozycje();
+        
+        x=rand.nextInt(27)+1; 
+        y=rand.nextInt(7)+1;
+        s2.pozycja(x, y);
+        s2.wyswietl_pozycje();
+        
+        x=rand.nextInt(27)+1; 
+        y=rand.nextInt(7)+1;
+        s3.pozycja(x, y);
+        s3.wyswietl_pozycje();
+        
+        //int tabelaX[] = new int[5];
+        //tabelaX[0]=s1.pozycjaX;
+        
+        
+        //s1.ruch();      
+        //s1.wyswietl_pozycje();
+ 
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 30; j++) {
+                if (i == 0 || i == 9 || j == 0 || j == 29) System.out.print("X");
+                else System.out.print("c");
+            }
+            System.out.println();
+        }
+                
     }
 }
+
 
 abstract class UzytkownikDrogi {
     protected String uzytkownik = "Uzytkownik Drogi";
     public abstract int predkosc();
+    public int pozycjaX=0, pozycjaY=0;
     
     public String about(){
         return uzytkownik;
+    }
+    
+    public void pozycja(int pozycjaX, int pozycjaY) {
+        this.pozycjaX=pozycjaX;
+        this.pozycjaY=pozycjaY;
+    }
+    
+    public void wyswietl_pozycje () {
+        System.out.print(pozycjaX +" ");
+        System.out.println(pozycjaY);
+    }
+    
+    public void ruch() {
+        int x;
+        Random rand = new Random();
+        
+        x=rand.nextInt(4);          
+        
+        switch (x) {
+            case 0: pozycjaX+=1;
+                break;
+            case 1: pozycjaX-=1;
+                break;
+            case 2: pozycjaY+=1;
+                break;
+            case 3: pozycjaY-=1;
+                break;
+            default: System.out.println("Wystąpił problem przy losowaniu");
+                break;
+        }
+        
     }
  
     
@@ -71,7 +143,7 @@ abstract class Dekorator extends UzytkownikDrogi {
 
  
 class Pieszy extends UzytkownikDrogi {
- 
+    
     public Pieszy(){
         uzytkownik = "Pieszy";
     }
@@ -79,10 +151,13 @@ class Pieszy extends UzytkownikDrogi {
     public int predkosc(){
         return 1;
     }
+    
 }
+    
+   
 
 class Rower extends UzytkownikDrogi {
- 
+
     public Rower(){
         uzytkownik = "Rower";
     }
@@ -90,10 +165,12 @@ class Rower extends UzytkownikDrogi {
     public int predkosc(){
         return 2;
     }
+    
+    
 }
 
 class Samochod extends UzytkownikDrogi {
- 
+    
     public Samochod(){
         uzytkownik = "Samochod";
     }
@@ -101,6 +178,8 @@ class Samochod extends UzytkownikDrogi {
     public int predkosc(){
         return 3;
     }
+    
+    
 }
  
 
