@@ -124,7 +124,7 @@ public class Dekorator3 {
                 System.out.println();
             }
             
-            
+        if (!kraksa) {
             System.out.println("Wciśnij Enter aby kontynuowac");
             try {
                 System.in.read();
@@ -139,10 +139,19 @@ public class Dekorator3 {
                 }
                 
             }
+        }
             
-        }      
-        System.out.println("DOSZLO DO ZDERZENIA!");
+        }
+        
+        System.out.println("!DOSZŁO DO ZDERZENIA!");
                 
+        for (int i=0; i<uzytkownik.length-1; i++) {
+                for (int j=i+1; j<uzytkownik.length; j++) {
+                    if (uzytkownik[i].pozycjaX==uzytkownik[j].pozycjaX && uzytkownik[i].pozycjaY==uzytkownik[j].pozycjaY) {
+                        System.out.println("W wypadku uczestniczyl " + uzytkownik[i].about() + " i " +uzytkownik[j].about());
+                    }
+                }
+            }
     }
 }
 
