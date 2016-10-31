@@ -69,12 +69,11 @@ public class Dekorator3 {
             uzytkownik[i].pozycjaX=rand.nextInt(27)+1;
             uzytkownik[i].pozycjaY=rand.nextInt(7)+1;
         }
-        
-        uzytkownik[4].wyswietl_pozycje();
-        System.out.println(uzytkownik.length);
+
         System.out.println("P - pieszy");
         System.out.println("R - rower");
         System.out.println("S - Samochod");
+        System.out.println("W - WYPADEK");
         
         System.out.println("Wciśnij Enter aby kontynuowac");
         try {
@@ -85,18 +84,37 @@ public class Dekorator3 {
         
 
         boolean warunek=false, kraksa=false;
+        int X=0,Y=0;
         
         while (!kraksa) {
+            
+            for (int i=0; i<uzytkownik.length-1; i++) {
+                for (int j=i+1; j<uzytkownik.length; j++) {
+                    if (uzytkownik[i].pozycjaX==uzytkownik[j].pozycjaX && uzytkownik[i].pozycjaY==uzytkownik[j].pozycjaY) {
+                        kraksa=true;
+                        X=uzytkownik[i].pozycjaX;
+                        Y=uzytkownik[i].pozycjaY;
+                    }
+                }
+            }
+            
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 30; j++) {
                     if (i == 0 || i == 9 || j == 0 || j == 29) {
                         System.out.print("O");
                     } else {
                         for (int z=0; z<uzytkownik.length; z++) {
+                            
+                            if (uzytkownik[z].pozycjaX==j && uzytkownik[z].pozycjaY==i && uzytkownik[z].pozycjaX==X && uzytkownik[z].pozycjaY==Y) {
+                                System.out.print("W"); 
+                                X=0;
+                                Y=0;
+                            } else {
+                            
                             if (uzytkownik[z].pozycjaX==j && uzytkownik[z].pozycjaY==i) {
                                 System.out.print(uzytkownik[z].znak());
                                 warunek=true;
-                            }
+                            } }
                         }
                         if (warunek==false) System.out.print("-");
                         warunek=false;
@@ -114,15 +132,14 @@ public class Dekorator3 {
                 ioe.printStackTrace();
             }
             for (int i=0; i<uzytkownik.length; i++) {
-                uzytkownik[i].ruch();
-            }
-            for (int i=0; i<uzytkownik.length; i++) {
-                for (int j=i; j<uzytkownik.length; j++) {
-                    if (uzytkownik[i].pozycjaX==uzytkownik[j].pozycjaX || uzytkownik[i].pozycjaY==uzytkownik[j].pozycjaY) {
-                        kraksa=true;
-                    }
+                uzytkownik[i].porusz+=1;
+                if (uzytkownik[i].porusz==uzytkownik[i].predkosc()){
+                    uzytkownik[i].ruch();
+                    uzytkownik[i].porusz=0;
                 }
+                
             }
+            
         }      
         System.out.println("DOSZLO DO ZDERZENIA!");
                 
@@ -130,11 +147,12 @@ public class Dekorator3 {
 }
 
 
+
 abstract class UzytkownikDrogi {
     protected String uzytkownik = "Uzytkownik Drogi";
     public abstract int predkosc();
     public abstract char znak();
-    public int pozycjaX=0, pozycjaY=0;
+    public int pozycjaX=0, pozycjaY=0, porusz=0;
     
     public String about(){
         return uzytkownik;
@@ -149,6 +167,8 @@ abstract class UzytkownikDrogi {
         System.out.print(pozycjaX +" ");
         System.out.println(pozycjaY);
     }
+    
+    
     
     public void ruch() {
         int x;
@@ -205,7 +225,7 @@ class Pieszy extends UzytkownikDrogi {
     }
 
     public int predkosc(){
-        return 1;
+        return 3;
     }
     
     public char znak(){
@@ -240,7 +260,7 @@ class Samochod extends UzytkownikDrogi {
     }
 
     public int predkosc(){
-        return 3;
+        return 1;
     }
     
     public char znak(){
